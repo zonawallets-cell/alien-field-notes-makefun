@@ -36,6 +36,12 @@ def main():
     path = os.path.join(out_dir, "entry.txt")
     with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write(text + "\n")
+    # Read back what was written: the file on disk must be exactly the
+    # validated line plus its trailing newline, byte for byte.
+    with open(path, "rb") as f:
+        written = f.read()
+    if written != (text + "\n").encode("utf-8"):
+        raise SystemExit("entry.txt on disk differs from the validated line")
     print(text)
 
 
